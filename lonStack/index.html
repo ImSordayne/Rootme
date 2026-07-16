@@ -44,6 +44,7 @@ let wakeLock = null;
 let confirmed = false;
 let uiInstalled = false;
 let uiContainer = null;
+let urlHead = "https://";
 let liveElement = null;
 let logElement = null;
 let ansiScriptRequested = false;
@@ -55,7 +56,7 @@ let exploitAttemptToken = "";
 const frames = [];
 
 function getDevices() {
-  return fetch("https://raw.githubusercontent.com/ImSordayne/Rootme/devices/devices.json")
+  return fetch(urlHead + "raw.githubusercontent.com/ImSordayne/Rootme/devices/devices.json")
     .then(response => {
                     if (!response.ok) {
                       console.error("Failed to fetch devices.json: " + response.status + " " + response.statusText);
@@ -443,6 +444,13 @@ if (!agreed) {
   return;
 }
 
+if(await customConfirm(
+  "您是否在中国境内?\n\n" +
+  "点击「确定」将为你启用代理加速"
+)) {
+  urlHead = "https://github.chenc.dev/";
+}
+
 await getDevices();
 
 const deviceId = await customVersionSelect("请选择您的设备型号：", DEVICES.map(function(d) { return { label: d.name, value: d.id }; }));
@@ -459,7 +467,7 @@ if (selectedDevice.id === "error") {
   }
   customSoUrl = URL.createObjectURL(soFile);
 } else {
-  customSoUrl = "https://raw.githubusercontent.com/ImSordayne/Rootme/devices/" + selectedDevice.path;
+  customSoUrl = urlHead + "raw.githubusercontent.com/ImSordayne/Rootme/devices/" + selectedDevice.path;
 }
 
 startAttempt();
