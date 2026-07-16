@@ -2,10 +2,22 @@
     "devices":[{
         "id":"rm-k80u-hos2",
         "name":"Redmi K80Ultra HyperOS2",
-        "path":"Redmi-K80Ultra/hos2.so"
+        "path":"Redmi/K80Ultra/hos2.so"
     },{
         "id":"rm-k80u-hos3",
         "name":"Redmi K80Ultra HyperOS3",
-        "path":"Redmi-K80Ultra/hos3.so"
+        "path":"Redmi/K80Ultra/hos3.so"
+    },{
+        "id":"rm-k90-all",
+        "name":"Redmi K90 AllOS",
+        "path":"Xiaomi/Pad8/all_os.so"
+    },{
+        "id":"rm-tb4p-all",
+        "name":"Redmi TurboPro",
+        "path":"Xiaomi/Pad8/all_os.so"
+    },{
+        "id":"xm-p8-all",
+        "name":"Xiaomi Pad8 AllOS",
+        "path":"Xiaomi/Pad8/all_os.so"
     }]
 }
