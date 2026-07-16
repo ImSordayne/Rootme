@@ -50,7 +50,7 @@ function customVersionSelect(message, options) {
       <div class="modal-card" style="max-width:500px;">
         <div class="modal-msg">${String(message).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
         ${searchHtml}
-        <div class="modal-btns" style="flex-direction:column; max-height:350px; overflow-y:auto; gap:6px;">
+        <div style="flex-direction:column; max-height:350px; overflow-y:auto; gap:6px;">
           ${btnsHtml}
         </div>
       </div>

