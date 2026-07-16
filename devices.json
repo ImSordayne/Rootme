@@ -1,4 +1,11 @@
 {
     "devices":[{
+        "id":"rm-k80u-hos2",
+        "name":"Redmi K80Ultra HyperOS2",
+        "path":"Redmi-K80Ultra/hos2.so"
+    },{
+        "id":"rm-k80u-hos3",
+        "name":"Redmi K80Ultra HyperOS3",
+        "path":"Redmi-K80Ultra/hos3.so"
     }]
 }
