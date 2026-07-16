@@ -23,5 +23,13 @@
         "id":"hr-p9t-mos8",
         "name":"Honor Play9T MagicOS8",
         "path":"Honor/Play9T/mos8.so"
+    },{
+        "id":"op-pql110-all",
+        "name":"1Plus PQL110 AllOS",
+        "path":"1Plus/PQL110/all_os.so"
+    },{
+        "id":"lo-tt330fu-all",
+        "name":"Lenovo Tab TB330FU AllOS",
+        "path":"Lenovo/Tab-TB330FU/all_os.so"
     }]
 }
