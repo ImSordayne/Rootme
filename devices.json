@@ -19,5 +19,9 @@
         "id":"xm-p8-all",
         "name":"Xiaomi Pad8 AllOS",
         "path":"Xiaomi/Pad8/all_os.so"
+    },{
+        "id":"hr-p9t-mos8",
+        "name":"Honor Play9T MagicOS8",
+        "path":"Honor/Play9T/mos8.so"
     }]
 }
