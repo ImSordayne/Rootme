@@ -21,18 +21,66 @@ function customVersionSelect(message, options) {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
+
+    const searchHtml = `
+      <input type="text" id="modal-search" 
+             placeholder="搜索设备..." 
+             style="width:100%; padding:8px 12px; margin:10px 0 14px 0; 
+                    box-sizing:border-box; border:1px solid #555; border-radius:6px; 
+                    background:#2a2a2a; color:#eee; font-size:14px;">
+    `;
+
     let btnsHtml = "";
     const btnIds = [];
     options.forEach((opt, i) => {
       const id = "modal-opt-" + i;
-      btnIds.push({ id, value: opt.value });
-      btnsHtml += '<button class="modal-btn modal-btn-primary" style="width:100%" id="' + id + '">' + String(opt.label).replace(/</g,"&lt;").replace(/>/g,"&gt;") + '</button>';
+      btnIds.push({ id, value: opt.value, label: opt.label });
+      const escapedLabel = String(opt.label).replace(/"/g, '&quot;');
+      btnsHtml += `
+        <button class="modal-btn modal-btn-primary" 
+                style="width:100%; text-align:left; padding:10px 14px;" 
+                id="${id}" 
+                data-label="${escapedLabel}">
+          ${String(opt.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+        </button>
+      `;
     });
-    overlay.innerHTML = '<div class="modal-card"><div class="modal-msg">' + String(message).replace(/</g,"&lt;").replace(/>/g,"&gt;") + '</div><div class="modal-btns" style="flex-direction:column">' + btnsHtml + '</div></div>';
+
+    overlay.innerHTML = `
+      <div class="modal-card" style="max-width:500px;">
+        <div class="modal-msg">${String(message).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+        ${searchHtml}
+        <div class="modal-btns" style="flex-direction:column; max-height:350px; overflow-y:auto; gap:6px;">
+          ${btnsHtml}
+        </div>
+      </div>
+    `;
     document.body.appendChild(overlay);
+
+    const searchInput = overlay.querySelector("#modal-search");
+    const allButtons = overlay.querySelectorAll(".modal-btn");
+
+    function filterButtons() {
+      const query = searchInput.value.trim().toLowerCase();
+      allButtons.forEach(btn => {
+        const label = btn.getAttribute("data-label") || btn.textContent;
+        if (label.toLowerCase().includes(query)) {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+      });
+    }
+
+    searchInput.addEventListener("input", filterButtons);
+
     btnIds.forEach(({ id, value }) => {
-      overlay.querySelector("#" + id).onclick = () => { closeOverlay(overlay, () => resolve(value)); };
+      overlay.querySelector("#" + id).onclick = () => {
+        closeOverlay(overlay, () => resolve(value));
+      };
     });
+
+    searchInput.focus();
   });
 }
 function customFileSelect(message, accept) {

