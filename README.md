@@ -7,4 +7,4 @@ Android 设备 Firefox 浏览器漏洞利用页面集合。利用 [CVE-2026-1070
 
 ## 在线访问
 
-部署后的站点：[imsordayne.github.io/Rootme/](https://imsordayne.github.io/Rootme/)(暂未上线)
+部署后的站点：[imsordayne.github.io/Rootme/](https://imsordayne.github.io/Rootme/)
