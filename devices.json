@@ -11,6 +11,10 @@
         "id":"rm-k90-all",
         "name":"Redmi K90 AllOS",
         "path":"Xiaomi/Pad8/all_os.so"
+    },,{
+        "id":"rm-k90u-os3",
+        "name":"Redmi K90Ultra HyperOS3",
+        "path":"Redmi/K90Ultra/os3.so"
     },{
         "id":"rm-tb4p-all",
         "name":"Redmi TurboPro",
