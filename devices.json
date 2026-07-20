@@ -35,5 +35,9 @@
         "id":"lo-tt330fu-all",
         "name":"Lenovo Tab TB330FU AllOS",
         "path":"Lenovo/Tab-TB330FU/all_os.so"
+    },{
+        "id":"zyb-t20pp",
+        "name":"作业帮 T20Pro+ OS5.2.0",
+        "path":"ZYB/T20Pro%2B/os520.so"
     }]
 }
