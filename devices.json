@@ -39,5 +39,11 @@
         "id":"zyb-t20pp",
         "name":"作业帮 T20Pro+ OS5.2.0",
         "path":"ZYB/T20Pro%2B/os520.so"
+    },{
+        "id":"vivo-x200p",
+        "name":"Vivo x200Pro OriginOS15.0.27.0",
+        "path":"Vivo/x200Pro/os15.so"
+        
+        
     }]
 }
